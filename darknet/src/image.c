@@ -239,7 +239,7 @@ image **load_alphabet()
 void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
 {
 
-FILE *g = fopen("/home/ana/darknet/coordinates.txt", "w");
+FILE *g = fopen("../coordinates.txt", "w");
 if (g == NULL)
 {
     printf("Error opening file!\n");
@@ -301,7 +301,7 @@ if (g == NULL)
 
 printf("Bounding Box: Left=%d, Top=%d, Right=%d, Bottom=%d\n", left, top, right, bot); 
 
-FILE *f = fopen("/home/ana/darknet/coordinates.txt", "a");
+FILE *f = fopen("../coordinates.txt", "a");
 if (f == NULL)
 {
     printf("Error opening file!\n");

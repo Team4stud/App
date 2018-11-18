@@ -44,3 +44,6 @@
         --avresample:       YES
     ```
     If not then install missing packages and rebuild. 
+
+###### Download the pre-trained weight file
+`wget https://pjreddie.com/media/files/yolov3.weights`
