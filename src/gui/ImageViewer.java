@@ -15,13 +15,13 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Photos {
+public class ImageViewer {
     BorderPane border;
     Stage stage;
     Scene scene;
     VideoLoader io;
 
-    public Photos(BorderPane border, Scene scene, Stage stage){
+    public ImageViewer(BorderPane border, Scene scene, Stage stage){
         this.border=border;
         this.scene=scene;
         this.stage=stage;
@@ -39,6 +39,7 @@ public class Photos {
         timeline.setCycleCount(
                 Animation.INDEFINITE
         );
+
 
         for(int index=1; index<700; index++) {
             EventHandler<ActionEvent>
