@@ -2,8 +2,11 @@ package gui;
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Window extends Application implements IWindow {
     Stage stage;
@@ -18,12 +21,20 @@ public class Window extends Application implements IWindow {
         MenuScene menuScene = new MenuScene(stage);
         setScene(menuScene.createScene());
         stage.show();
+
+        primaryStage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
+
     }
 
     @Override
     public void setScene(Scene scene) {
         stage.setScene(scene);
     }
+
 
 
 

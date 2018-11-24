@@ -12,9 +12,12 @@ import javafx.stage.Stage;
 
 public class Boxes {
     Stage stage;
-    Photos photos;
+    ImageViewer photos;
+    String fontColor = "-fx-font: 18 arial; -fx-base: #c0c0c0;";
+    String backgroundColor = " -fx-control-inner-background:#B3B3B3; ";
 
-    public Boxes(Stage stage, Photos photo){
+
+    public Boxes(Stage stage, ImageViewer photo){
         this.stage = stage;
         this.photos = photo;
     }
@@ -22,19 +25,18 @@ public class Boxes {
     public VBox createFirstBox(){
         VBox hBox = new VBox();
         hBox.setSpacing(20);
-
         Text text = new Text("Wpisz ścieżkę do filmu");
-        text.setStyle("-fx-font: 18 arial; -fx-base: #c0c0c0;");
+        text.setStyle(fontColor);
         text.setFill(Color.web("#730029"));
 
         TextArea pathArea = new TextArea();
         pathArea.setFont(Font.font(java.awt.Font.DIALOG));
         pathArea.setMaxHeight(10);
         pathArea.setMaxWidth(240);
-        pathArea.setStyle(" -fx-control-inner-background:#B3B3B3; ");
+        pathArea.setStyle(backgroundColor);
 
         CheckBox checkBox = new CheckBox("Obraz z kamerki");
-        checkBox.setStyle("-fx-font: 18 arial; -fx-base: #c0c0c0;");
+        checkBox.setStyle(fontColor);
 
         hBox.getChildren().addAll(text,pathArea,checkBox);
 
@@ -46,7 +48,7 @@ public class Boxes {
         vBox.setSpacing(20);
 
         Text information = new Text("Wybierz śledzony obiekt");
-        information.setStyle("-fx-font: 18 arial; -fx-base: #c0c0c0;");
+        information.setStyle(fontColor);
         information.setFill(Color.web("#730029"));
 
         ChoiceBox choiceBots=new ChoiceBox(FXCollections.observableArrayList("Człowiek","Pies","Auto"));
@@ -54,7 +56,7 @@ public class Boxes {
         choiceBots.setOnAction(e ->
         { System.out.println(choiceBots.getValue()); });
         choiceBots.setTooltip(new Tooltip("Śledzony obiekt"));
-        choiceBots.setStyle("-fx-font: 18 arial; -fx-base: #c0c0c0;");
+        choiceBots.setStyle("-fx-font: 18 arial;"+fontColor);
         choiceBots.setMinWidth(240);
 
         Button button= new Button("START");
@@ -82,7 +84,7 @@ public class Boxes {
         pathArea.setFont(Font.font(java.awt.Font.DIALOG));
         pathArea.setMaxHeight(10);
         pathArea.setMaxWidth(200);
-        pathArea.setStyle(" -fx-control-inner-background:#B3B3B3; ");
+        pathArea.setStyle(backgroundColor);
 
         vBox.getChildren().addAll(pathArea);
         return vBox;
