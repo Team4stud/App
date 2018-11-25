@@ -1,6 +1,8 @@
 package gui;
 
-import gui.Boxes;
+import input.VideoLoader;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -8,36 +10,35 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class MenuScene {
-    private Stage stage;
-    private BorderPane border;
-    private Scene scene;
-    private Boxes boxes;
-    private ImageViewer photos;
+public class MenuScene extends Application {
+    Boxes boxes;
 
-    public MenuScene(Stage primaryStage){
-        this.stage = primaryStage;
-        this.border =new BorderPane();
-        this.photos = new ImageViewer(border,scene,stage);
-        this.boxes = new Boxes(stage,photos);
-    }
-
-    public Scene createScene(){
+    @Override
+    public void start(Stage stage){
+        Stage window = new Stage();
+        BorderPane border = new BorderPane();
         String color = "-fx-background-color: #c0c0c0;";
+        boxes = new Boxes(window);
         VBox firstBox = boxes.createFirstBox();
         VBox secondBox = boxes.createSecondBox();
-        VBox informationBox = boxes.createInformationBox();
 
         border.setStyle(color);
-        border.setPrefSize(800,700);
+        border.setPrefSize(600,300);
         border.setLeft(firstBox);
         border.setRight(secondBox);
-        border.setCenter(informationBox);
-        border.setMargin(firstBox, new Insets(20,0,0,40));
-        border.setMargin(secondBox, new Insets(20,40,0,0));
-        border.setMargin(informationBox, new Insets(190,0,0,20));
-        scene = new Scene(border, Color.BLACK);
+        border.setMargin(firstBox, new Insets(40,0,0,40));
+        border.setMargin(secondBox, new Insets(40,40,0,0));
+        Scene scene = new Scene(border, Color.BLACK);
 
-        return scene;
+        window.setScene(scene);
+        window.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
+        });
+        window.showAndWait();
+    }
+
+    public VideoLoader getIo(){
+        return boxes.getIo();
     }
 }

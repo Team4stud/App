@@ -9,39 +9,39 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+
+
 public class ImageViewer {
-    BorderPane border;
-    Stage stage;
-    Scene scene;
+
     VideoLoader io;
 
-    public ImageViewer(BorderPane border, Scene scene, Stage stage){
-        this.border=border;
-        this.scene=scene;
-        this.stage=stage;
+    public ImageViewer(VideoLoader io){
+        this.io=io;
     }
 
-    public void showPhotos(){
+    public Scene  createScene(){
         ImageView imageView = new ImageView();
         imageView.setCursor(Cursor.CLOSED_HAND);
         imageView.setFitWidth(700);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
-
+        String color = "-fx-background-color: #c0c0c0;";
+        String fontColor = "-fx-font: 18 arial; -fx-base: #c0c0c0;";
         Pane stackPane = new Pane();
+        Text text = new Text();
+        text.setStyle(fontColor);
+        text.setFill(Color.web("#730029"));
+        text.setStyle("-fx-font: 24 arial; -fx-base: #730029 ;");
 
         Timeline timeline  = new Timeline();
         timeline.setCycleCount(
@@ -53,6 +53,7 @@ public class ImageViewer {
                 try {
                     imageView.setImage(io.get());
                     stackPane.getChildren().setAll(imageView,setRectangle());
+                    text.setText(setText());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -62,21 +63,17 @@ public class ImageViewer {
         timeline.getKeyFrames().add(kf);
         timeline.play();
 
-
         HBox hbox = new HBox();
         hbox.setMinSize(400,400);
         hbox.getChildren().addAll(stackPane);
-
+        BorderPane border = new BorderPane();
+        border.setTop(text);
+        border.setMargin(text, new Insets(20,50,50,380));
         border.setBottom(hbox);
+        border.setStyle(color);
+        border.setPrefSize(800,500);
         border.setMargin(hbox, new Insets(0,50,30,50));
-        stage.show();
-    }
-
-
-    public void runApplication(){
-        io = new VideoLoader("video/sample.mp4", 100);
-        Thread thread = new Thread(io);
-        thread.start();
+        return new Scene(border, Color.BLACK);
     }
 
     private Rectangle setRectangle(){
@@ -86,6 +83,16 @@ public class ImageViewer {
         rectangle.setStroke(Color.BLACK);
         rectangle.setStrokeWidth(2);
         return rectangle;
+    }
+
+    private String setText(){
+        String[] texts= new String[4];
+        texts[0] = "PRAWO";
+        texts[1] = "LEWO";
+        texts[2] = "GÓRA";
+        texts[3] = "DÓŁ";
+
+        return  texts[(int) (Math.random()*1000%4)];
     }
 
 }

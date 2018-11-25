@@ -18,24 +18,21 @@ public class Window extends Application implements IWindow {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        MenuScene menuScene = new MenuScene(stage);
-        setScene(menuScene.createScene());
+        MenuScene menuScene = new MenuScene();
+        menuScene.start(primaryStage);
+        ImageViewer imageViewer = new ImageViewer(menuScene.getIo());
+        setScene(imageViewer.createScene());
         stage.show();
 
         primaryStage.setOnCloseRequest(t -> {
             Platform.exit();
             System.exit(0);
         });
-
-
     }
 
     @Override
     public void setScene(Scene scene) {
         stage.setScene(scene);
     }
-
-
-
 
 }
