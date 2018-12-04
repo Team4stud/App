@@ -25,13 +25,15 @@ public class VideoLoader implements Runnable {
     private int delay = 100;
 
     public VideoLoader(String file_path) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
+        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         this.path = file_path;
         queue = new LimitedQueue<>(limit);
     }
 
     public VideoLoader(String file_path, int size_limit) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
+        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         this.path = file_path;
         this.limit = size_limit;
         queue = new LimitedQueue<>(limit);
