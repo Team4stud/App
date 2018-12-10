@@ -19,13 +19,12 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 
-
 public class ImageViewer {
 
     VideoLoader io;
 
     public ImageViewer(VideoLoader io){
-        this.io=io;
+        this.io = io;
     }
 
     public Scene  createScene(){
@@ -50,13 +49,13 @@ public class ImageViewer {
 
         EventHandler<ActionEvent>
                 onFishined = arg0 -> {
-                try {
-                    imageView.setImage(io.get());
-                    stackPane.getChildren().setAll(imageView,setRectangle());
-                    text.setText(setText());
+                    try {
+                        imageView.setImage(io.get());
+                        stackPane.getChildren().setAll(imageView,setRectangle());
+                        text.setText(setText());
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                 }
             };
         KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08), onFishined,null,null );
