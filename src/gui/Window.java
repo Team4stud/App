@@ -18,12 +18,15 @@ public class Window extends Application implements IWindow {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
+        /*Show main menu*/
         MenuScene menuScene = new MenuScene();
         menuScene.start(primaryStage);
-        ImageViewer imageViewer = new ImageViewer(menuScene.getIo());
+        /*Create second window after click "Start" button
+        * take data form menuScene and run the application*/
+        ImageViewer imageViewer = new ImageViewer(menuScene.getPath(),menuScene.getObject());
         setScene(imageViewer.createScene());
         stage.show();
-
+        /*show until closing*/
         primaryStage.setOnCloseRequest(t -> {
             Platform.exit();
             System.exit(0);

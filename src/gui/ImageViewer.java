@@ -18,38 +18,43 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-
-
 public class ImageViewer {
-
     VideoLoader io;
+    String path;
+    String object;
 
-    public ImageViewer(VideoLoader io){
-        this.io=io;
+    public ImageViewer(String path,String object){
+        this.path = path;
+        this.object = object;
+        runApplication();
     }
 
     public Scene  createScene(){
+        String color = "-fx-background-color: #c0c0c0;";
+        String fontColor = "-fx-font: 18 arial; -fx-base: #c0c0c0;";
+        String textColor = "#730029";
+        String textStyle = "-fx-font: 24 arial; -fx-base: #730029 ;";
+        /*create imageView to display photos*/
         ImageView imageView = new ImageView();
         imageView.setCursor(Cursor.CLOSED_HAND);
         imageView.setFitWidth(700);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
-        String color = "-fx-background-color: #c0c0c0;";
-        String fontColor = "-fx-font: 18 arial; -fx-base: #c0c0c0;";
         Pane stackPane = new Pane();
         Text text = new Text();
         text.setStyle(fontColor);
-        text.setFill(Color.web("#730029"));
-        text.setStyle("-fx-font: 24 arial; -fx-base: #730029 ;");
-
+        text.setFill(Color.web(textColor));
+        text.setStyle(textStyle);
+        /* A Timeline, defined by one or more KeyFrames, processes individual KeyFrame sequentially,
+        in the order specified by KeyFrame.time.*/
         Timeline timeline  = new Timeline();
         timeline.setCycleCount(
                 Animation.INDEFINITE
         );
-
+        /*display photos and rectangle on them*/
         EventHandler<ActionEvent>
-                onFishined = arg0 -> {
+                onFinished = arg0 -> {
                 try {
                     imageView.setImage(io.get());
                     stackPane.getChildren().setAll(imageView,setRectangle());
@@ -59,10 +64,11 @@ public class ImageViewer {
                     e.printStackTrace();
                 }
             };
-        KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08), onFishined,null,null );
+        KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08),  onFinished,null,null );
+        /*add the keyframe to the timeline*/
         timeline.getKeyFrames().add(kf);
         timeline.play();
-
+        /*Create border to show photos and text*/
         HBox hbox = new HBox();
         hbox.setMinSize(400,400);
         hbox.getChildren().addAll(stackPane);
@@ -91,8 +97,15 @@ public class ImageViewer {
         texts[1] = "LEWO";
         texts[2] = "GÓRA";
         texts[3] = "DÓŁ";
-
         return  texts[(int) (Math.random()*1000%4)];
+    }
+
+
+    public void runApplication(){
+        /* io = new VideoLoader(path, 100); */
+        io = new VideoLoader("video/sample.mp4", 100);
+        Thread thread = new Thread(io);
+        thread.start();
     }
 
 }
