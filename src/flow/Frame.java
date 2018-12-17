@@ -1,33 +1,37 @@
 package flow;
 
-import com.sun.javafx.geom.Rectangle;
+import com.sun.javafx.geom.Point2D;
 import org.opencv.core.Mat;
 
-import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class Frame {
     private Mat frame;
-    private Rectangle bounds;
-    private Point diff;
+    public Rectangle2D bounds;
+    public Point2D diff;
 
     public Frame(Mat frame) {
         this.frame = frame;
     }
 
-    public Frame(Mat frame, Rectangle bounds) {
+    public Frame(Mat frame, Rectangle2D bounds) {
         this.frame = frame;
         this.bounds = bounds;
     }
 
-    public void setBounds(Rectangle bounds) {
+    public void setBounds(Rectangle2D bounds) {
         this.bounds = bounds;
     }
 
-    public void setDiff(Point diff) {
-        this.diff = diff;
+
+    public Point2D getBoundiesCenter() {
+        Point2D center = new Point2D();
+        double x = bounds.getWidth() + bounds.getX()/2;
+        double y = bounds.getHeight() + bounds.getY()/2;
+        center.x = (float)x;
+        center.y = (float)y;
+
+        return center;
     }
 
-    public Point getBoundiesCenter() {
-        return new Point(1, 1);
-    }
 }
