@@ -25,15 +25,15 @@ public class VideoLoader implements Runnable {
     private int delay = 100;
 
     public VideoLoader(String file_path) {
-        System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         this.path = file_path;
         queue = new LimitedQueue<>(limit);
     }
 
     public VideoLoader(String file_path, int size_limit) {
-        System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         this.path = file_path;
         this.limit = size_limit;
         queue = new LimitedQueue<>(limit);
@@ -61,9 +61,9 @@ public class VideoLoader implements Runnable {
         }
     }
 
-    public Image get() {
+    public Mat get() {
         if(!queue.isEmpty())
-            return mat2Image(queue.get());
+            return queue.get();
         else
             return null;
     }
@@ -80,16 +80,7 @@ public class VideoLoader implements Runnable {
         return height;
     }
 
-    private Image mat2Image(Mat matrix) {
-        MatOfByte mob=new MatOfByte();
-        Imgcodecs.imencode(".jpg", matrix, mob);
-        byte ba[]=mob.toArray();
-        try {
-            BufferedImage bi = ImageIO.read(new ByteArrayInputStream(ba));
-            return SwingFXUtils.toFXImage(bi,null);
-        } catch (IOException e) {
-            System.out.println("failed to convert mat to image");
-            return null;
-        }
+    public int size() {
+        return this.queue.size();
     }
 }

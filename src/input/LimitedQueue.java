@@ -26,7 +26,7 @@ public class LimitedQueue<E> extends LinkedList<E> {
 
     public synchronized E get() {
         if (size() > 0)
-            return remove(size()-1);
+            return remove(0);
         else
             return null;
     }

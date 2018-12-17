@@ -1,6 +1,9 @@
 package gui;
 
-import input.VideoLoader;
+
+import flow.Controller;
+import flow.Frame;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,7 +22,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class ImageViewer {
-    VideoLoader io;
+    Controller flow;
     String path;
     String object;
 
@@ -56,10 +59,10 @@ public class ImageViewer {
         EventHandler<ActionEvent>
                 onFinished = arg0 -> {
             try {
-                imageView.setImage(io.get());
+                Frame frame = flow.get();
+                if(frame!=null && frame.frame!=null) imageView.setImage(Frame.mat2Image(frame.frame));
                 stackPane.getChildren().setAll(imageView,setRectangle());
                 text.setText(setText());
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -103,8 +106,9 @@ public class ImageViewer {
 
     public void runApplication(){
         /* io = new VideoLoader(path, 100); */
-        io = new VideoLoader("video/sample.mp4", 100);
-        Thread thread = new Thread(io);
+        flow = new Controller("video/sample.mp4", "");
+
+        Thread thread = new Thread(flow);
         thread.start();
     }
 
