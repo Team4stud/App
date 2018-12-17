@@ -26,7 +26,6 @@ public class ImageViewer {
     public ImageViewer(String path,String object){
         this.path = path;
         this.object = object;
-        runApplication();
     }
 
     public Scene  createScene(){
