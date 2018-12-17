@@ -55,15 +55,15 @@ public class ImageViewer {
         /*display photos and rectangle on them*/
         EventHandler<ActionEvent>
                 onFinished = arg0 -> {
-                try {
-                    imageView.setImage(io.get());
-                    stackPane.getChildren().setAll(imageView,setRectangle());
-                    text.setText(setText());
+            try {
+                imageView.setImage(io.get());
+                stackPane.getChildren().setAll(imageView,setRectangle());
+                text.setText(setText());
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
         KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08),  onFinished,null,null );
         /*add the keyframe to the timeline*/
         timeline.getKeyFrames().add(kf);
@@ -84,7 +84,7 @@ public class ImageViewer {
 
     private Rectangle setRectangle(){
         Rectangle rectangle = new Rectangle(Math.random()*100,Math.random()*100,
-                    Math.random()*100,Math.random()*100);
+                Math.random()*100,Math.random()*100);
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStroke(Color.BLACK);
         rectangle.setStrokeWidth(2);
