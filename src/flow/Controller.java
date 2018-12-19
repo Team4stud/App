@@ -1,50 +1,24 @@
 package flow;
 
-import input.VideoLoader;
-import org.opencv.core.Mat;
+import analize.Analizer;
+import frame.Frame;
+import input.FileLoader;
+import input.VideoProvider;
 
-public class Controller implements Runnable {
-    public String path;
-    public String object;
-    public String cfg;
-    public String weigts;
+public class Controller{
+    public VideoProvider video;
+    public Analizer analizer;
+    //public Classifier classifier;
 
-    public VideoLoader io;
-    public OutputQueue out;
-    public Analizer  analizer;
-
-    public Controller(String path, String object) {
-        this.path = path;
-        this.object = object;
-
-        io = new VideoLoader(path);
-        out = new OutputQueue();
-        analizer = new Analizer();
-
-        Thread thread_io = new Thread(io);
-        thread_io.start();
-
-
-    }
-
-    @Override
-    public void run() {
-
-
-        while (true) {
-            Mat mat = io.get();
-            if(mat != null) {
-                Frame frame = new Frame(io.get());
-                //frame = analizer.setDiff(frame);
-                out.add(frame);
-            }
-            //yolo
-            //analizer
-            //
-        }
+    public Controller(VideoProvider video, Analizer analizer) { //Classifier
+        this.video = video;
+        this.analizer = analizer;
     }
 
     public Frame get() {
-        return new Frame(io.get());
+        Frame frame = video.getFrame();
+        //classifier
+        //analizer
+        return frame;
     }
 }

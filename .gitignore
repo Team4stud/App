@@ -24,5 +24,6 @@
 .idea/
 out/
 *.iml
+*.log
 
 !video/sample.mp4

@@ -1,9 +1,13 @@
 package gui;
 
 
+import analize.Analizer;
 import flow.Controller;
-import flow.Frame;
+import frame.Frame;
 
+import frame.FrameUtils;
+import input.FileLoader;
+import input.VideoProvider;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -60,7 +64,7 @@ public class ImageViewer {
                 onFinished = arg0 -> {
             try {
                 Frame frame = flow.get();
-                if(frame!=null && frame.frame!=null) imageView.setImage(Frame.mat2Image(frame.frame));
+                if(frame!=null && frame.getFrame()!=null) imageView.setImage(FrameUtils.mat2Image(frame.getFrame()));
                 stackPane.getChildren().setAll(imageView,setRectangle());
                 text.setText(setText());
             } catch (Exception e) {
@@ -105,11 +109,13 @@ public class ImageViewer {
 
 
     public void runApplication(){
-        /* io = new VideoLoader(path, 100); */
-        flow = new Controller("video/sample.mp4", "");
+        VideoProvider video = new FileLoader("video/sample.mp4");
+        Thread input = new Thread(video);
+        input.start();
 
-        Thread thread = new Thread(flow);
-        thread.start();
+        Analizer analizer = new Analizer();
+        //Classifier classifier = new Classifier(wegihts, cfg, labels)
+        flow = new Controller(video, analizer);
     }
 
 }
