@@ -2,8 +2,10 @@
 
 # https://gist.github.com/rxaviers/7360908
 
-###### Java version
+###### Java
 `1.8.0_192`
+###### OpenCV
+`4.0.0`
 
 ###### These packages are required to install openCV
 * cmake
@@ -14,14 +16,13 @@
 * libavformat-dev
 * libavdevice-dev
 
-###### Install openCV 3.4.3
-1. Download source code from [https://github.com/opencv/opencv/releases/tag/3.4.3]
-2. Unpack
-3. `cd opencv-3.4.3/`
-4. `mkdir build`
-5. `cd build`
-6. `cmake ..`
-7. `make -j8`
+###### Install openCV 4.0.0
+1. `git clone https://github.com/opencv/opencv.git`
+2. `cd opencv/`
+3. `mkdir build`
+4. `cd build`
+5. `cmake ..`
+6. `make -j8`
 
 ###### Add openCV to project in Intellij Idea
 1. `File`->`Project Structure...`

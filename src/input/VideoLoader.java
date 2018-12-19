@@ -43,8 +43,8 @@ public class VideoLoader implements Runnable {
     public void run() {
         VideoCapture capture = new VideoCapture(path);
 
-        width = capture.get(Videoio.CV_CAP_PROP_FRAME_WIDTH);
-        height = capture.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT);
+        //width = capture.get(Videoio.CV_CAP_PROP_FRAME_WIDTH);
+        //height = capture.get(Videoio.CV_CAP_PROP_FRAME_HEIGHT);
         fps = capture.get(Videoio.CAP_PROP_FPS);
 
         Mat frame = new Mat();
