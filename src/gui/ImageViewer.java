@@ -109,7 +109,7 @@ public class ImageViewer {
 
 
     public void runApplication(){
-        VideoProvider video = new FileLoader("video/sample.mp4");
+        VideoProvider video = new FileLoader("sample/sample.mp4");
         Thread input = new Thread(video);
         input.start();
 
