@@ -1,6 +1,6 @@
 package gui;
 
-import input.VideoLoader;
+import input.FileLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MenuScene extends Application {
-    private VideoLoader io;
+
+    private FileLoader io;
     private  Stage  window;
     private TextArea pathArea;
     private String fontColor = "-fx-font: 18 arial; -fx-base: #c0c0c0;";

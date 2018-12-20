@@ -1,17 +1,16 @@
 package gui;
 
-
+import frame.FrameUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class Window extends Application implements IWindow {
     Stage stage;
 
     public static void main(String[] args) {
+        FrameUtils.loadOpenCv();
         launch(args);
     }
 
@@ -24,7 +23,6 @@ public class Window extends Application implements IWindow {
         /*Create second window after click "Start" button
         * take data form menuScene and run the application*/
         ImageViewer imageViewer = new ImageViewer(menuScene.getPath(),menuScene.getObject());
-        imageViewer.runApplication();
         setScene(imageViewer.createScene());
         stage.show();
         /*show until closing*/

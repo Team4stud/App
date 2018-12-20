@@ -1,6 +1,14 @@
 package gui;
 
-import input.VideoLoader;
+
+import analize.Analizer;
+import flow.Controller;
+import frame.Frame;
+
+import frame.FrameUtils;
+import input.CameraLoader;
+import input.FileLoader;
+import input.VideoProvider;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -17,15 +25,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import java.util.Optional;
 
 public class ImageViewer {
-    VideoLoader io;
+    Controller flow;
     String path;
     String object;
 
     public ImageViewer(String path,String object){
         this.path = path;
-        this.object = object;
+        runApplication();
     }
 
     public Scene  createScene(){
@@ -54,15 +63,15 @@ public class ImageViewer {
         /*display photos and rectangle on them*/
         EventHandler<ActionEvent>
                 onFinished = arg0 -> {
-                try {
-                    imageView.setImage(io.get());
-                    stackPane.getChildren().setAll(imageView,setRectangle());
-                    text.setText(setText());
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
+            try {
+                flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
+                stackPane.getChildren().setAll(imageView,setRectangle());
+                text.setText(setText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
         KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08),  onFinished,null,null );
         /*add the keyframe to the timeline*/
         timeline.getKeyFrames().add(kf);
@@ -83,7 +92,7 @@ public class ImageViewer {
 
     private Rectangle setRectangle(){
         Rectangle rectangle = new Rectangle(Math.random()*100,Math.random()*100,
-                    Math.random()*100,Math.random()*100);
+                Math.random()*100,Math.random()*100);
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStroke(Color.BLACK);
         rectangle.setStrokeWidth(2);
@@ -101,10 +110,15 @@ public class ImageViewer {
 
 
     public void runApplication(){
-        /* io = new VideoLoader(path, 100); */
-        io = new VideoLoader("video/sample.mp4", 100);
-        Thread thread = new Thread(io);
-        thread.start();
+
+        VideoProvider video = new FileLoader("video/sample.mp4");     //czytanie z pliku
+        //VideoProvider video = new CameraLoader(0);              //z domyslnej kamerki
+        Thread input = new Thread(video);
+        input.start();
+
+        Analizer analizer = new Analizer();
+        //Classifier classifier = new Classifier(weights, cfg, labels)
+        flow = new Controller(video, analizer);
     }
 
 }
