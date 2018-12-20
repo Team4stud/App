@@ -21,21 +21,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.Optional;
 
 public class ImageViewer {
     Controller flow;
-    String path;
-    String object;
-
-    public ImageViewer(String path,String object){
-        this.path = path;
-        runApplication();
-    }
 
     public Scene  createScene(){
         String color = "-fx-background-color: #c0c0c0;";
@@ -109,9 +104,11 @@ public class ImageViewer {
     }
 
 
-    public void runApplication(){
-
-        VideoProvider video = new FileLoader("video/sample.mp4");     //czytanie z pliku
+    public void runApplication(String path){
+        if(path==null)
+            System.exit(0);
+        System.out.print(path);
+        VideoProvider video = new FileLoader(path);     //czytanie z pliku
         //VideoProvider video = new CameraLoader(0);              //z domyslnej kamerki
         Thread input = new Thread(video);
         input.start();
