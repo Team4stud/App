@@ -65,8 +65,7 @@ public class ImageViewer {
         EventHandler<ActionEvent>
                 onFinished = arg0 -> {
             try {
-                Frame frame = flow.get();
-                frame.getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
+                flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
                 stackPane.getChildren().setAll(imageView,setRectangle());
                 text.setText(setText());
             } catch (Exception e) {
