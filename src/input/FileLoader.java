@@ -1,7 +1,6 @@
 package input;
 
 import frame.Frame;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
@@ -13,10 +12,8 @@ public class FileLoader extends VideoProvider {
 
     public FileLoader(String path) {
         super(path);
-        //System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        loadOpenCv();
         current = new Mat();
-        //loadOpenCv();
     }
 
     @Override
