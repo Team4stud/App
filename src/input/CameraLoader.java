@@ -5,18 +5,19 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 
-public class FileLoader extends VideoProvider {
-    private String path = "";
+public class CameraLoader extends VideoProvider {
+    private int deviceId = 0;
 
-    public FileLoader(String path) {
+
+    public CameraLoader(int deviceId) {
         current = new Mat();
         fps = 1.0;
-        this.path = path;
+        this.deviceId = deviceId;
     }
 
     @Override
     protected VideoCapture getVideoCapture() {
-        return new VideoCapture(path);
+        return new VideoCapture(deviceId);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package gui;
 
+import frame.FrameUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -9,6 +10,7 @@ public class Window extends Application implements IWindow {
     Stage stage;
 
     public static void main(String[] args) {
+        FrameUtils.loadOpenCv();
         launch(args);
     }
 

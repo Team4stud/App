@@ -6,6 +6,7 @@ import flow.Controller;
 import frame.Frame;
 
 import frame.FrameUtils;
+import input.CameraLoader;
 import input.FileLoader;
 import input.VideoProvider;
 import javafx.animation.Animation;
@@ -110,12 +111,13 @@ public class ImageViewer {
 
 
     public void runApplication(){
-        VideoProvider video = new FileLoader("video/sample.mp4");
+        VideoProvider video = new FileLoader("video/sample.mp4");     //czytanie z pliku
+        //VideoProvider video = new CameraLoader(0);              //z domyslnej kamerki
         Thread input = new Thread(video);
         input.start();
 
         Analizer analizer = new Analizer();
-        //Classifier classifier = new Classifier(wegihts, cfg, labels)
+        //Classifier classifier = new Classifier(weights, cfg, labels)
         flow = new Controller(video, analizer);
     }
 

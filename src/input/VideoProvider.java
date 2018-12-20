@@ -1,24 +1,28 @@
 package input;
 
 import frame.Frame;
-import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
-abstract public class VideoProvider implements Runnable {
-    protected String path;
+public abstract class VideoProvider implements Runnable {
+    protected Mat current;
+    protected double fps;
+    protected abstract VideoCapture getVideoCapture();
 
-    public VideoProvider(String path){
-        this.path = path;
-    }
+    public abstract Frame getFrame();
 
-    abstract public Frame getFrame();
+    @Override
+    public void run() {
+        VideoCapture capture = getVideoCapture();
+        fps = capture.get(Videoio.CAP_PROP_FPS);
 
-    protected void loadOpenCv() {
-        String os = System.getProperty("os.name").toLowerCase();
-
-        if(os.contains("win")) {
-            System.load("D:\\ProgramFiles\\opencv\\opencv\\build\\java\\x64\\opencv_java344.dll");
-        } else {
-            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        while (capture.read(current)) {
+            try {
+                Thread.sleep(1000/(int)fps);
+            } catch (InterruptedException ex) {
+                System.out.println("Failed to sleep input.FileLoader");
+            }
         }
     }
 }
