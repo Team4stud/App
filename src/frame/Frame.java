@@ -3,6 +3,7 @@ package frame;
 import com.sun.javafx.geom.Point2D;
 import org.opencv.core.Mat;
 import java.awt.geom.Rectangle2D;
+import java.util.Optional;
 
 
 public class Frame {
@@ -20,8 +21,8 @@ public class Frame {
         this.bounds = bounds;
     }
 
-    public Mat getFrame() {
-        return frame;
+    public Optional<Mat> getFrame() {
+        return Optional.ofNullable(frame);
     }
 
     public void setBounds(Rectangle2D bounds) {

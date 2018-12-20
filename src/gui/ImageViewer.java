@@ -25,6 +25,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.util.Optional;
+
 public class ImageViewer {
     Controller flow;
     String path;
@@ -64,7 +66,7 @@ public class ImageViewer {
                 onFinished = arg0 -> {
             try {
                 Frame frame = flow.get();
-                if(frame!=null && frame.getFrame()!=null) imageView.setImage(FrameUtils.mat2Image(frame.getFrame()));
+                frame.getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
                 stackPane.getChildren().setAll(imageView,setRectangle());
                 text.setText(setText());
             } catch (Exception e) {

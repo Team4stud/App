@@ -32,6 +32,10 @@ public class FileLoader extends VideoProvider {
     }
 
     public Frame getFrame() {
-        return new Frame(current);
+        if(current.empty()) {
+            return new Frame(null);
+        } else {
+            return new Frame(current);
+        }
     }
 }
