@@ -11,8 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import flow.Frame;
+import frame.Frame;
 
 public class Classifier {
 
@@ -35,12 +36,12 @@ public class Classifier {
         return names;
     }
 
-    public Frame processImage(Frame img) {
+    public Frame processFrame(Frame img) {
 
-        //Mat image = img.frame;
-
+        Optional<Mat> optimage = img.getFrame();
+        Mat image = optimage.get();
         Size sz = new Size(416, 416);
-        Mat blob = Dnn.blobFromImage(img.frame, 0.00392, sz, new Scalar(0), true, false);
+        Mat blob = Dnn.blobFromImage(image, 0.00392, sz, new Scalar(0), true, false);
         net.setInput(blob);
 
         List<Mat> result = new ArrayList<>();
@@ -64,10 +65,10 @@ public class Classifier {
 
                 if (confidence > confThreshold)
                 {
-                    int centerX = (int)(row.get(0,0)[0] * img.frame.cols());
-                    int centerY = (int)(row.get(0,1)[0] * img.frame.rows());
-                    int width   = (int)(row.get(0,2)[0] * img.frame.cols());
-                    int height  = (int)(row.get(0,3)[0] * img.frame.rows());
+                    int centerX = (int)(row.get(0,0)[0] * image.cols());
+                    int centerY = (int)(row.get(0,1)[0] * image.rows());
+                    int width   = (int)(row.get(0,2)[0] * image.cols());
+                    int height  = (int)(row.get(0,3)[0] * image.rows());
                     int left    = centerX - width  / 2;
                     int top     = centerY - height / 2;
 
@@ -94,7 +95,7 @@ public class Classifier {
         {
             int idx = ind[i];
             Rect box = boxesArray[idx];
-            Imgproc.rectangle(img.frame, box.tl(), box.br(), new Scalar(0,0,255), 2);
+            Imgproc.rectangle(image, box.tl(), box.br(), new Scalar(0,0,255), 2);
             System.out.println(box.x);
             img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
           //  System.out.println(classes.get(clsIds.get(idx)));
