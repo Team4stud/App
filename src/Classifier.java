@@ -5,12 +5,14 @@ import org.opencv.utils.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import flow.Frame;
 
 public class Classifier {
 
@@ -33,12 +35,12 @@ public class Classifier {
         return names;
     }
 
-    public Mat processImage(String imagePath) {
+    public Frame processImage(Frame img) {
 
-        Mat image = Imgcodecs.imread(imagePath);
+        //Mat image = img.frame;
 
         Size sz = new Size(416, 416);
-        Mat blob = Dnn.blobFromImage(image, 0.00392, sz, new Scalar(0), true, false);
+        Mat blob = Dnn.blobFromImage(img.frame, 0.00392, sz, new Scalar(0), true, false);
         net.setInput(blob);
 
         List<Mat> result = new ArrayList<>();
@@ -62,10 +64,10 @@ public class Classifier {
 
                 if (confidence > confThreshold)
                 {
-                    int centerX = (int)(row.get(0,0)[0] * image.cols());
-                    int centerY = (int)(row.get(0,1)[0] * image.rows());
-                    int width   = (int)(row.get(0,2)[0] * image.cols());
-                    int height  = (int)(row.get(0,3)[0] * image.rows());
+                    int centerX = (int)(row.get(0,0)[0] * img.frame.cols());
+                    int centerY = (int)(row.get(0,1)[0] * img.frame.rows());
+                    int width   = (int)(row.get(0,2)[0] * img.frame.cols());
+                    int height  = (int)(row.get(0,3)[0] * img.frame.rows());
                     int left    = centerX - width  / 2;
                     int top     = centerY - height / 2;
 
@@ -85,26 +87,27 @@ public class Classifier {
         MatOfInt indices = new MatOfInt();
         Dnn.NMSBoxes(boxes, confidences, confThreshold, nmsThresh, indices);
         //System.out.print(boxes.toList());
+
         // Draw result boxes:
         int [] ind = indices.toArray();
         for (int i = 0; i < ind.length; ++i)
         {
             int idx = ind[i];
             Rect box = boxesArray[idx];
-            Imgproc.rectangle(image, box.tl(), box.br(), new Scalar(0,0,255), 2);
-            System.out.println(box);
-            System.out.println(classes.get(clsIds.get(idx)));
+            Imgproc.rectangle(img.frame, box.tl(), box.br(), new Scalar(0,0,255), 2);
+            System.out.println(box.x);
+            img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
+          //  System.out.println(classes.get(clsIds.get(idx)));
         }
-        System.out.println(image);
-      //  Imgcodecs.imwrite("out.png", image);
-        return image;
+
+        return img;
     }
 
-    public static void main(String[] args) throws IOException{
+ /*   public static void main(String[] args) throws IOException{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Classifier example = new Classifier("/home/ana/Desktop/ObjectDetection-YOLO/yolov3.weights", "/home/ana/Desktop/ObjectDetection-YOLO/yolov3.cfg", "/home/ana/Desktop/ObjectDetection-YOLO/coco.names");
         example.processImage("/home/ana/Desktop/ObjectDetection-YOLO/bird.jpg");
         example.processImage("/home/ana/darknet/data/ironman.jpg");
     }
-
+*/
 }
