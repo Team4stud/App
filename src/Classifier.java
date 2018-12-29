@@ -5,17 +5,23 @@ import org.opencv.utils.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Classifier {
 
     Net net;
+    static ArrayList<String> classes;
 
-    public Classifier(String weights, String cfg) {
+    public Classifier(String weights, String cfg, String classesFile) throws IOException {
 
         net = Dnn.readNetFromDarknet(cfg, weights);
-
+        classes = new ArrayList<>();
+        classes = (ArrayList<String>) Files.lines(Paths.get(classesFile)).collect(Collectors.toList());
     }
 
     private static List<String> getOutputNames(Net net) {
@@ -78,7 +84,7 @@ public class Classifier {
         MatOfRect boxes = new MatOfRect(boxesArray);
         MatOfInt indices = new MatOfInt();
         Dnn.NMSBoxes(boxes, confidences, confThreshold, nmsThresh, indices);
-
+        //System.out.print(boxes.toList());
         // Draw result boxes:
         int [] ind = indices.toArray();
         for (int i = 0; i < ind.length; ++i)
@@ -86,16 +92,17 @@ public class Classifier {
             int idx = ind[i];
             Rect box = boxesArray[idx];
             Imgproc.rectangle(image, box.tl(), box.br(), new Scalar(0,0,255), 2);
-            //System.out.println(box);
+            System.out.println(box);
+            System.out.println(classes.get(clsIds.get(idx)));
         }
         System.out.println(image);
       //  Imgcodecs.imwrite("out.png", image);
         return image;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Classifier example = new Classifier("/home/ana/Desktop/ObjectDetection-YOLO/yolov3.weights", "/home/ana/Desktop/ObjectDetection-YOLO/yolov3.cfg");
+        Classifier example = new Classifier("/home/ana/Desktop/ObjectDetection-YOLO/yolov3.weights", "/home/ana/Desktop/ObjectDetection-YOLO/yolov3.cfg", "/home/ana/Desktop/ObjectDetection-YOLO/coco.names");
         example.processImage("/home/ana/Desktop/ObjectDetection-YOLO/bird.jpg");
         example.processImage("/home/ana/darknet/data/ironman.jpg");
     }
