@@ -1,6 +1,6 @@
 package gui;
 
-import input.VideoLoader;
+import input.FileLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -12,14 +12,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MenuScene extends Application {
-    private VideoLoader io;
-    private  Stage  window;
+
+    private FileLoader io;
+    private Stage  window;
     private TextArea pathArea;
     private String fontColor = "-fx-font: 18 arial; -fx-base: #c0c0c0;";
     private String backgroundColor = " -fx-control-inner-background:#B3B3B3; ";
@@ -58,22 +61,32 @@ public class MenuScene extends Application {
     private VBox createFirstBox(){
         int pathMaxHeight = 10;
         int pathMaxWidth = 240;
+        int buttonMaxWidth = 200;
         /*create text and area for writing path
          create checkbox to choose the way of download the movie */
         VBox hBox = new VBox();
         hBox.setSpacing(space);
-        Text text = new Text("Wpisz ścieżkę do filmu");
-        pathArea = new TextArea();
+
+        Text text = new Text("Wybierz ścieżkę do filmu");
+        Button button= new Button("Przeglądaj pliki");
+        button.setStyle(fontColor);
+        button.setMaxWidth(buttonMaxWidth);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
         CheckBox checkBox = new CheckBox("Obraz z kamerki");
         text.setStyle(fontColor);
         text.setFill(Color.web(textFillColor));
-        pathArea.setFont(Font.font(fontDialog));
-        pathArea.setMaxHeight(pathMaxHeight);
-        pathArea.setMaxWidth(pathMaxWidth);
-        pathArea.setStyle(backgroundColor);
         checkBox.setStyle(fontColor);
+        hBox.getChildren().addAll(text,button,checkBox);
 
-        hBox.getChildren().addAll(text,pathArea,checkBox);
+        /*run the application with the given data and close the window*/
+        button.setOnAction(actionEvent -> {
+            File file=  fileChooser.showOpenDialog(window);
+            if (file != null) {
+                String path = file.toString();
+                setPath(path);
+            }
+        });
         return hBox;
     }
 
@@ -97,8 +110,6 @@ public class MenuScene extends Application {
         button.setMaxWidth(buttonMaxWidth);
         /*run the application with the given data and close the window*/
         button.setOnAction(actionEvent -> {
-            setPath(pathArea.getText());
-            setObject(choiceBots.getValue().toString());
             window.close();
         });
 

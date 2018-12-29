@@ -1,9 +1,14 @@
 package gui;
 
 
+import analize.Analizer;
 import flow.Controller;
-import flow.Frame;
+import frame.Frame;
 
+import frame.FrameUtils;
+import input.CameraLoader;
+import input.FileLoader;
+import input.VideoProvider;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,21 +21,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.Optional;
 
 public class ImageViewer {
     Controller flow;
-    String path;
-    String object;
-
-    public ImageViewer(String path,String object){
-        this.path = path;
-        this.object = object;
-        runApplication();
-    }
 
     public Scene  createScene(){
         String color = "-fx-background-color: #c0c0c0;";
@@ -58,9 +58,9 @@ public class ImageViewer {
         /*display photos and rectangle on them*/
         EventHandler<ActionEvent>
                 onFinished = arg0 -> {
+
             try {
-                Frame frame = flow.get();
-                if(frame!=null && frame.frame!=null) imageView.setImage(Frame.mat2Image(frame.frame));
+                flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
                 stackPane.getChildren().setAll(imageView,setRectangle());
                 text.setText(setText());
             } catch (Exception e) {
@@ -104,12 +104,18 @@ public class ImageViewer {
     }
 
 
-    public void runApplication(){
-        /* io = new VideoLoader(path, 100); */
-        flow = new Controller("video/sample.mp4", "");
+    public void runApplication(String path){
+        if(path==null)
+            System.exit(0);
+        System.out.print(path);
+        VideoProvider video = new FileLoader(path);     //czytanie z pliku
+        //VideoProvider video = new CameraLoader(0);              //z domyslnej kamerki
+        Thread input = new Thread(video);
+        input.start();
 
-        Thread thread = new Thread(flow);
-        thread.start();
+        Analizer analizer = new Analizer();
+        //Classifier classifier = new Classifier(weights, cfg, labels)
+        flow = new Controller(video, analizer);
     }
 
 }
