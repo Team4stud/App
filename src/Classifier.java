@@ -2,7 +2,6 @@ import org.opencv.core.Core;
 import org.opencv.core.*;
 import org.opencv.dnn.*;
 import org.opencv.utils.*;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.awt.geom.Rectangle2D;
@@ -38,10 +37,10 @@ public class Classifier {
 
     public Frame processFrame(Frame img) {
 
-        Optional<Mat> optimage = img.getFrame();
-        Mat image = optimage.get();
+        //Optional<Mat> image = img.getFrame();
+        //Mat img = image.get();
         Size sz = new Size(416, 416);
-        Mat blob = Dnn.blobFromImage(image, 0.00392, sz, new Scalar(0), true, false);
+        Mat blob = Dnn.blobFromImage(img.getFrame().get(), 0.00392, sz, new Scalar(0), true, false);
         net.setInput(blob);
 
         List<Mat> result = new ArrayList<>();
@@ -65,17 +64,16 @@ public class Classifier {
 
                 if (confidence > confThreshold)
                 {
-                    int centerX = (int)(row.get(0,0)[0] * image.cols());
-                    int centerY = (int)(row.get(0,1)[0] * image.rows());
-                    int width   = (int)(row.get(0,2)[0] * image.cols());
-                    int height  = (int)(row.get(0,3)[0] * image.rows());
+                    int centerX = (int)(row.get(0,0)[0] * img.getFrame().get().cols());
+                    int centerY = (int)(row.get(0,1)[0] * img.getFrame().get().rows());
+                    int width   = (int)(row.get(0,2)[0] * img.getFrame().get().cols());
+                    int height  = (int)(row.get(0,3)[0] * img.getFrame().get().rows());
                     int left    = centerX - width  / 2;
                     int top     = centerY - height / 2;
 
                     clsIds.add((int)classIdPoint.x);
                     confs.add(confidence);
                     rects.add(new Rect(left, top, width, height));
-                    //System.out.println("left:" + left + ", top:" + top + "width: " + width + "height: " + height);
                 }
             }
         }
@@ -94,21 +92,12 @@ public class Classifier {
         for (int i = 0; i < ind.length; ++i)
         {
             int idx = ind[i];
+            //  if(classes.get(clsIds.get(idx))==Chosen_Class_Of_Object) {
             Rect box = boxesArray[idx];
-            Imgproc.rectangle(image, box.tl(), box.br(), new Scalar(0,0,255), 2);
-            System.out.println(box.x);
+            Imgproc.rectangle(img.getFrame().get(), box.tl(), box.br(), new Scalar(0,0,255), 2);
             img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
-          //  System.out.println(classes.get(clsIds.get(idx)));
         }
 
         return img;
     }
-
- /*   public static void main(String[] args) throws IOException{
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Classifier example = new Classifier("/home/ana/Desktop/ObjectDetection-YOLO/yolov3.weights", "/home/ana/Desktop/ObjectDetection-YOLO/yolov3.cfg", "/home/ana/Desktop/ObjectDetection-YOLO/coco.names");
-        example.processImage("/home/ana/Desktop/ObjectDetection-YOLO/bird.jpg");
-        example.processImage("/home/ana/darknet/data/ironman.jpg");
-    }
-*/
 }
