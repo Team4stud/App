@@ -1,3 +1,5 @@
+package yolo;
+
 import org.opencv.core.Core;
 import org.opencv.core.*;
 import org.opencv.dnn.*;
