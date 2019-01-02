@@ -97,7 +97,7 @@ public class Classifier {
             //  if(classes.get(clsIds.get(idx))==Chosen_Class_Of_Object) {
             Rect box = boxesArray[idx];
             Imgproc.rectangle(img.getFrame().get(), box.tl(), box.br(), new Scalar(0,0,255), 2);
-            img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
+            img.setBounds(box);
         }
 
         return img;
