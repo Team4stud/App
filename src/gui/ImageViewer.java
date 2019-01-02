@@ -27,6 +27,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import yolo.Classifier;
+
+import java.io.IOException;
 import java.util.Optional;
 
 public class ImageViewer {
@@ -60,8 +63,9 @@ public class ImageViewer {
                 onFinished = arg0 -> {
 
             try {
-                flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
-                stackPane.getChildren().setAll(imageView,setRectangle());
+                //flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
+                flow.get().display().ifPresent(value -> imageView.setImage(FrameUtils.mat2Image(value)));
+                stackPane.getChildren().setAll(imageView);
                 text.setText(setText());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -113,9 +117,15 @@ public class ImageViewer {
         Thread input = new Thread(video);
         input.start();
 
+        Classifier classifier = null;
         Analizer analizer = new Analizer();
-        //Classifier classifier = new Classifier(weights, cfg, labels)
-        flow = new Controller(video, analizer);
+        try {
+            classifier = new Classifier("yolov3.weights", "yolov3.cfg", "coco.names");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+        flow = new Controller(video, analizer, classifier);
     }
 
 }

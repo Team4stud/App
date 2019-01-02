@@ -4,6 +4,7 @@ import analize.Analizer;
 import frame.Frame;
 import input.FileLoader;
 import input.VideoProvider;
+import org.opencv.imgcodecs.Imgcodecs;
 import yolo.Classifier;
 
 public class Controller{
@@ -19,8 +20,13 @@ public class Controller{
 
     public Frame get() {
         Frame frame = video.getFrame();
-        //classifier
-        //analizer
+        //if(frame.getFrame().isPresent())
+            //frame = classifier.processFrame(frame);
+
+//        if(frame.getBounds().isPresent()) frame = analizer.setDiff(frame);
+
         return frame;
     }
+
+
 }

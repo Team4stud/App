@@ -15,7 +15,7 @@ public class Analizer {
 
     public Frame setDiff(Frame f) {
         if (prevFrame == null) {
-            f.diff = new Point2D();
+            f.diff = new Point2D(0, 0);
             prevFrame = f;
             prevPoint = f.diff;
         } else {
