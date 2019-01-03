@@ -18,12 +18,14 @@ public class Classifier {
 
     Net net;
     static ArrayList<String> classes;
+    String objectType;
 
-    public Classifier(String weights, String cfg, String classesFile) throws IOException {
+    public Classifier(String weights, String cfg, String classesFile, String objectType) throws IOException {
 
         net = Dnn.readNetFromDarknet(cfg, weights);
         classes = new ArrayList<>();
         classes = (ArrayList<String>) Files.lines(Paths.get(classesFile)).collect(Collectors.toList());
+        this.objectType = objectType;
     }
 
     private static List<String> getOutputNames(Net net) {
@@ -35,7 +37,7 @@ public class Classifier {
         return names;
     }
 
-    public Frame processFrame(Frame img) {
+    public Frame processFrame(Frame img) throws Exception{
 
         //Optional<Mat> image = img.getFrame();
         //Mat img = image.get();
@@ -51,6 +53,8 @@ public class Classifier {
         List<Integer> clsIds = new ArrayList<>();
         List<Float> confs = new ArrayList<>();
         List<Rect> rects = new ArrayList<>();
+        float tempConf = 0;     //used to get most confident object
+
         for (int i = 0; i < result.size(); ++i)
         {
             Mat level = result.get(i);
@@ -60,6 +64,8 @@ public class Classifier {
                 Mat scores = row.colRange(5, level.cols());
                 Core.MinMaxLocResult mm = Core.minMaxLoc(scores);
                 float confidence = (float)mm.maxVal;
+                if (confidence<tempConf) break;
+                tempConf = confidence;
                 Point classIdPoint = mm.maxLoc;
 
                 if (confidence > confThreshold)
@@ -77,6 +83,20 @@ public class Classifier {
                 }
             }
         }
+        //Leave in lists only the most confident object (last one)
+        if(confs.isEmpty()) {
+            throw new Exception("No objects found");
+        }
+
+        Rect c_rect = rects.get(rects.size() - 1);
+        Float c_conf = confs.get(confs.size() - 1);
+        int c_cl = clsIds.get(clsIds.size() - 1);
+        confs.clear();
+        rects.clear();
+        clsIds.clear();
+        confs.add(c_conf);
+        rects.add(c_rect);
+        clsIds.add(c_cl);
 
         // Apply non-maximum suppression procedure.
         float nmsThresh = 0.5f;
@@ -87,15 +107,16 @@ public class Classifier {
         Dnn.NMSBoxes(boxes, confidences, confThreshold, nmsThresh, indices);
         //System.out.print(boxes.toList());
 
-        // Draw result boxes:
+        // Pass result boxes:
         int [] ind = indices.toArray();
         for (int i = 0; i < ind.length; ++i)
         {
             int idx = ind[i];
-            //  if(classes.get(clsIds.get(idx))==Chosen_Class_Of_Object) {
-            Rect box = boxesArray[idx];
-            Imgproc.rectangle(img.getFrame().get(), box.tl(), box.br(), new Scalar(0,0,255), 2);
-            img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
+            if(classes.get(clsIds.get(idx)).equalsIgnoreCase(objectType)) {
+                 Rect box = boxesArray[idx];
+                 //Imgproc.rectangle(img.getFrame().get(), box.tl(), box.br(), new Scalar(0,0,255), 2);
+                 img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
+             }
         }
 
         return img;
