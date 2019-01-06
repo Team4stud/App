@@ -1,14 +1,18 @@
 package frame;
 
 import com.sun.javafx.geom.Point2D;
+import javafx.scene.image.Image;
 import org.opencv.core.Mat;
-import java.awt.geom.Rectangle2D;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import java.util.Optional;
 
 
 public class Frame {
     private Mat frame;
-    private Rectangle2D bounds;
+    private Rect bounds;
     public Point2D diff;
 
 
@@ -16,26 +20,34 @@ public class Frame {
         this.frame = frame;
     }
 
-    public Frame(Mat frame, Rectangle2D bounds) {
-        this.frame = frame;
-        this.bounds = bounds;
-    }
-
     public Optional<Mat> getFrame() {
         return Optional.ofNullable(frame);
     }
 
-    public void setBounds(Rectangle2D bounds) {
+    public Optional<Rect> getBounds() {
+        return Optional.ofNullable(bounds);
+    }
+
+    public void setBounds(Rect bounds) {
         this.bounds = bounds;
     }
 
     public Point2D getBoundsCenter() {
         Point2D center = new Point2D();
-        double x = bounds.getWidth() + bounds.getX()/2;
-        double y = bounds.getHeight() + bounds.getY()/2;
+        double x = bounds.width + bounds.x/2.0;
+        double y = bounds.height + bounds.y/2.0;
         center.x = (float)x;
         center.y = (float)y;
 
         return center;
+    }
+
+    public Optional<Mat> display() {
+        Mat img = frame;
+
+        if(getBounds().isPresent())
+            Imgproc.rectangle(img, bounds, new Scalar(0.0, 0.0, 1.0), 3);
+
+        return Optional.ofNullable(img);
     }
 }
