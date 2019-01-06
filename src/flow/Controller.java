@@ -25,7 +25,8 @@ public class Controller{
             frame = classifier.processFrame(frame);
         frame.display().ifPresent(img -> Imgcodecs.imwrite("aa/" + i +".jpg", img));
         i++;
-//        if(frame.getBounds().isPresent()) frame = analizer.setDiff(frame);
+        if(frame.getBounds().isPresent()) frame = analizer.setDiff(frame);
+        System.out.println(frame.diff);
 
         return frame;
     }

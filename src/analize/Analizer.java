@@ -20,8 +20,7 @@ public class Analizer {
             prevPoint = f.diff;
         } else {
             Point2D center = f.getBoundsCenter();
-            f.diff.x = prevPoint.x - center.x;
-            f.diff.y = prevPoint.y - center.y;
+            f.diff = new Point2D(prevPoint.x - center.x, prevPoint.y - center.y);
             prevFrame = f;
             prevPoint = center;
         }
