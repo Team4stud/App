@@ -4,7 +4,7 @@ import com.sun.javafx.geom.Point2D;
 import javafx.scene.image.Image;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
-import org.opencv.core.Scalar;Imgcodecs.imwrite("C:\\File\\input.jpg", );
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.Optional;

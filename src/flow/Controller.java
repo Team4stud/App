@@ -11,6 +11,7 @@ public class Controller{
     public VideoProvider video;
     public Analizer analizer;
     public Classifier classifier;
+    private int i = 0;
 
     public Controller(VideoProvider video, Analizer analizer, Classifier classifier) {
         this.video = video;
@@ -20,9 +21,10 @@ public class Controller{
 
     public Frame get() {
         Frame frame = video.getFrame();
-        //if(frame.getFrame().isPresent())
-            //frame = classifier.processFrame(frame);
-
+        if(frame.getFrame().isPresent())
+            frame = classifier.processFrame(frame);
+        frame.display().ifPresent(img -> Imgcodecs.imwrite("aa/" + i +".jpg", img));
+        i++;
 //        if(frame.getBounds().isPresent()) frame = analizer.setDiff(frame);
 
         return frame;
