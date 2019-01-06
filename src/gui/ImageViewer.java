@@ -72,7 +72,7 @@ public class ImageViewer {
                 e.printStackTrace();
             }
         };
-        KeyFrame kf = new KeyFrame(Duration.millis(1500),  onFinished,null,null );
+        KeyFrame kf = new KeyFrame(Duration.millis(1000),  onFinished,null,null );
         /*add the keyframe to the timeline*/
         timeline.getKeyFrames().add(kf);
         timeline.play();
@@ -121,9 +121,9 @@ public class ImageViewer {
         Classifier classifier = null;
         Analizer analizer = new Analizer();
         try {
-            classifier = new Classifier("/home/katarzyna/zespolowe/yolov3.weights",
-                    "/home/katarzyna/zespolowe/yolov3.cfg",
-                    "/home/katarzyna/zespolowe/coco.names");
+            classifier = new Classifier("yolov3.weights",
+                    "yolov3.cfg",
+                    "coco.names");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
