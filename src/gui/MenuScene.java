@@ -110,7 +110,7 @@ public class MenuScene extends Application {
         button.setMaxWidth(buttonMaxWidth);
         /*run the application with the given data and close the window*/
         button.setOnAction(actionEvent -> {
-            window.close();
+           window.close();
         });
 
         vBox.getChildren().addAll(information,choiceBots,button);

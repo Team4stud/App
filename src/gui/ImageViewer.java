@@ -63,15 +63,16 @@ public class ImageViewer {
                 onFinished = arg0 -> {
 
             try {
+                Frame frame = flow.get();
                 //flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
-                flow.get().display().ifPresent(value -> imageView.setImage(FrameUtils.mat2Image(value)));
+                frame.display().ifPresent(value -> imageView.setImage(FrameUtils.mat2Image(value)));
                 stackPane.getChildren().setAll(imageView);
-                text.setText(setText());
+                text.setText("X: "+frame.diff.x + " Y: "+frame.diff.y );
             } catch (Exception e) {
                 e.printStackTrace();
             }
         };
-        KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08),  onFinished,null,null );
+        KeyFrame kf = new KeyFrame(Duration.millis(1500),  onFinished,null,null );
         /*add the keyframe to the timeline*/
         timeline.getKeyFrames().add(kf);
         timeline.play();
@@ -120,7 +121,9 @@ public class ImageViewer {
         Classifier classifier = null;
         Analizer analizer = new Analizer();
         try {
-            classifier = new Classifier("yolov3.weights", "yolov3.cfg", "coco.names");
+            classifier = new Classifier("/home/katarzyna/zespolowe/yolov3.weights",
+                    "/home/katarzyna/zespolowe/yolov3.cfg",
+                    "/home/katarzyna/zespolowe/coco.names");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
