@@ -123,7 +123,8 @@ public class ImageViewer {
         try {
             classifier = new Classifier("yolov3.weights",
                     "yolov3.cfg",
-                    "coco.names");
+                    "coco.names",
+                    "person");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);
