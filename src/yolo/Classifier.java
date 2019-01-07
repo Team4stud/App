@@ -91,16 +91,6 @@ public class Classifier {
             return img;
         }
 
-        Rect c_rect = rects.get(rects.size() - 1);
-        Float c_conf = confs.get(confs.size() - 1);
-        int c_cl = clsIds.get(clsIds.size() - 1);
-        confs.clear();
-        rects.clear();
-        clsIds.clear();
-        confs.add(c_conf);
-        rects.add(c_rect);
-        clsIds.add(c_cl);
-
         // Apply non-maximum suppression procedure.
         float nmsThresh = 0.5f;
         MatOfFloat confidences = new MatOfFloat(Converters.vector_float_to_Mat(confs));
@@ -119,6 +109,7 @@ public class Classifier {
                  Rect box = boxesArray[idx];
                  //Imgproc.rectangle(img.getFrame().get(), box.tl(), box.br(), new Scalar(0,0,255), 2);
                  img.setBounds(box);
+                 break;
              }
         }
 
