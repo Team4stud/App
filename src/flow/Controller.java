@@ -1,6 +1,7 @@
 package flow;
 
 import analize.Analizer;
+import com.sun.javafx.geom.Point2D;
 import frame.Frame;
 import input.FileLoader;
 import input.VideoProvider;
@@ -23,7 +24,10 @@ public class Controller{
         if(frame.getFrame().isPresent())
             frame = classifier.processFrame(frame);
 
-        if(frame.getBounds().isPresent()) frame = analizer.setDiff(frame);
+        if(frame.getBounds().isPresent())
+            frame = analizer.setDiff(frame);
+        else
+            frame.diff = new Point2D(0, 0);
 
         return frame;
     }

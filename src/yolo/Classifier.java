@@ -1,5 +1,6 @@
 package yolo;
 
+import com.sun.javafx.geom.Point2D;
 import org.opencv.core.Core;
 import org.opencv.core.*;
 import org.opencv.dnn.*;
@@ -39,7 +40,7 @@ public class Classifier {
         return names;
     }
 
-    public Frame processFrame(Frame img) throws Exception{
+    public Frame processFrame(Frame img) {
 
         //Optional<Mat> image = img.getFrame();
         //Mat img = image.get();
@@ -87,7 +88,7 @@ public class Classifier {
         }
         //Leave in lists only the most confident object (last one)
         if(confs.isEmpty()) {
-            throw new Exception("No objects found");
+            return img;
         }
 
         Rect c_rect = rects.get(rects.size() - 1);
@@ -117,7 +118,7 @@ public class Classifier {
             if(classes.get(clsIds.get(idx)).equalsIgnoreCase(objectType)) {
                  Rect box = boxesArray[idx];
                  //Imgproc.rectangle(img.getFrame().get(), box.tl(), box.br(), new Scalar(0,0,255), 2);
-                 img.setBounds(new Rectangle2D.Double(box.x, box.y, box.width, box.height));
+                 img.setBounds(box);
              }
         }
 
