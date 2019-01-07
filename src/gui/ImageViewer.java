@@ -27,6 +27,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import yolo.Classifier;
+
+import java.io.IOException;
 import java.util.Optional;
 
 public class ImageViewer {
@@ -60,14 +63,16 @@ public class ImageViewer {
                 onFinished = arg0 -> {
 
             try {
-                flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
-                stackPane.getChildren().setAll(imageView,setRectangle());
-                text.setText(setText());
+                Frame frame = flow.get();
+                //flow.get().getFrame().ifPresent(img -> imageView.setImage(FrameUtils.mat2Image(img)));
+                frame.display().ifPresent(value -> imageView.setImage(FrameUtils.mat2Image(value)));
+                stackPane.getChildren().setAll(imageView);
+                text.setText("X: "+frame.diff.x + " Y: "+frame.diff.y );
             } catch (Exception e) {
                 e.printStackTrace();
             }
         };
-        KeyFrame kf = new KeyFrame(Duration.seconds(1*0.08),  onFinished,null,null );
+        KeyFrame kf = new KeyFrame(Duration.millis(1000),  onFinished,null,null );
         /*add the keyframe to the timeline*/
         timeline.getKeyFrames().add(kf);
         timeline.play();
@@ -113,9 +118,17 @@ public class ImageViewer {
         Thread input = new Thread(video);
         input.start();
 
+        Classifier classifier = null;
         Analizer analizer = new Analizer();
-        //Classifier classifier = new Classifier(weights, cfg, labels)
-        flow = new Controller(video, analizer);
+        try {
+            classifier = new Classifier("yolov3.weights",
+                    "yolov3.cfg",
+                    "coco.names");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+        flow = new Controller(video, analizer, classifier);
     }
 
 }

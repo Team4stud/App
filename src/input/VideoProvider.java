@@ -12,6 +12,10 @@ public abstract class VideoProvider implements Runnable {
 
     public abstract Frame getFrame();
 
+    public double getFps() {
+        return this.fps;
+    }
+
     @Override
     public void run() {
         VideoCapture capture = getVideoCapture();
