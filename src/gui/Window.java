@@ -23,7 +23,7 @@ public class Window extends Application implements IWindow {
         /*Create second window after click "Start" button
         * take data form menuScene and run the application*/
         ImageViewer imageViewer = new ImageViewer();
-        imageViewer.runApplication(menuScene.getPath());
+        imageViewer.runApplication(menuScene.getPath(),menuScene.getObject(),menuScene.isCheckboxPointed());
         setScene(imageViewer.createScene());
         stage.show();
         /*show until closing*/

@@ -85,46 +85,31 @@ public class ImageViewer {
         border.setMargin(text, new Insets(20,50,50,380));
         border.setBottom(hbox);
         border.setStyle(color);
-        border.setPrefSize(800,500);
+        border.setPrefSize(800,700);
         border.setMargin(hbox, new Insets(0,50,30,50));
         return new Scene(border, Color.BLACK);
     }
 
-    private Rectangle setRectangle(){
-        Rectangle rectangle = new Rectangle(Math.random()*100,Math.random()*100,
-                Math.random()*100,Math.random()*100);
-        rectangle.setFill(Color.TRANSPARENT);
-        rectangle.setStroke(Color.BLACK);
-        rectangle.setStrokeWidth(2);
-        return rectangle;
-    }
+    public void runApplication(String path, String objectToFollow, boolean readFromFile){
 
-    private String setText(){
-        String[] texts= new String[4];
-        texts[0] = "PRAWO";
-        texts[1] = "LEWO";
-        texts[2] = "GÓRA";
-        texts[3] = "DÓŁ";
-        return  texts[(int) (Math.random()*1000%4)];
-    }
-
-
-    public void runApplication(String path){
-        if(path==null)
-            System.exit(0);
-        System.out.print(path);
-        VideoProvider video = new FileLoader(path);     //czytanie z pliku
-        //VideoProvider video = new CameraLoader(0);              //z domyslnej kamerki
+        VideoProvider video;
+        if(!readFromFile) {
+            if (path == null)
+                System.exit(0);
+            video = new FileLoader(path);
+        }
+        else
+            video = new CameraLoader(0);
         Thread input = new Thread(video);
         input.start();
 
         Classifier classifier = null;
         Analizer analizer = new Analizer();
         try {
-            classifier = new Classifier("yolov3.weights",
-                    "yolov3.cfg",
-                    "coco.names",
-                    "person");
+            classifier = new Classifier("/home/katarzyna/zespolowe/yolov3.weights",
+                    "/home/katarzyna/zespolowe/yolov3.cfg",
+                    "/home/katarzyna/zespolowe/coco.names",
+                    objectToFollow);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.exit(1);

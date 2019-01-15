@@ -32,6 +32,8 @@ public class MenuScene extends Application {
     private  String path;
     private String object;
     int space = 30;
+    private CheckBox checkBox;
+    private boolean isPointed = false;
 
     @Override
     public void start(Stage stage){
@@ -43,7 +45,7 @@ public class MenuScene extends Application {
         VBox secondBox =  createSecondBox();
         /*set border parameters*/
         border.setStyle(borderColor);
-        border.setPrefSize(600,300);
+        border.setPrefSize(600,400);
         border.setLeft(firstBox);
         border.setRight(secondBox);
         border.setMargin(firstBox, new Insets(40,0,0,40));
@@ -73,7 +75,7 @@ public class MenuScene extends Application {
         button.setMaxWidth(buttonMaxWidth);
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
-        CheckBox checkBox = new CheckBox("Obraz z kamerki");
+        checkBox = new CheckBox("Obraz z kamerki");
         text.setStyle(fontColor);
         text.setFill(Color.web(textFillColor));
         checkBox.setStyle(fontColor);
@@ -81,7 +83,7 @@ public class MenuScene extends Application {
 
         /*run the application with the given data and close the window*/
         button.setOnAction(actionEvent -> {
-            File file=  fileChooser.showOpenDialog(window);
+            File file = fileChooser.showOpenDialog(window);
             if (file != null) {
                 String path = file.toString();
                 setPath(path);
@@ -98,8 +100,8 @@ public class MenuScene extends Application {
         VBox vBox = new VBox();
         vBox.setSpacing(space);
         Text information = new Text("Wybierz śledzony obiekt");
-        ChoiceBox choiceBots=new ChoiceBox(FXCollections.observableArrayList(listOfObjects()));
-        Button button= new Button("START");
+        ChoiceBox choiceBots = new ChoiceBox(FXCollections.observableArrayList(listOfObjects()));
+        Button button = new Button("START");
         choiceBots.setTooltip(new Tooltip("Śledzony obiekt"));
         choiceBots.setValue(listOfObjects().get(0));
         information.setStyle(fontColor);
@@ -110,28 +112,46 @@ public class MenuScene extends Application {
         button.setMaxWidth(buttonMaxWidth);
         /*run the application with the given data and close the window*/
         button.setOnAction(actionEvent -> {
-           window.close();
+            isPointed = checkBox.isSelected();
+            setObject(choiceBots.getValue().toString());
+            window.close();
         });
 
         vBox.getChildren().addAll(information,choiceBots,button);
         return vBox;
     }
 
-    private void setPath(String path){
+    private void setPath(String path)
+    {
         this.path = path;
     }
 
-    public String getPath() {
+    public String getPath()
+    {
         return path;
     }
 
-    private void setObject(String object){
-        this.object = object;
+    private void setObject(String object)
+    {
+        if(object == "Człowiek")
+            this.object = "person";
+        else if(object == "Pies")
+            this.object = "dog";
+        else if(object == "Kot")
+            this.object = "cat";
+        else
+            this.object = "car";
+
+    }
+    String getObject()
+    {
+        return this.object;
     }
 
-    String getObject(){
-        return object;
+    boolean isCheckboxPointed (){
+        return isPointed;
     }
+
     /*create ArrayList from enum Objects*/
     private ArrayList listOfObjects(){
         ArrayList<Objects> arrayList = new ArrayList<>(Arrays.asList(Objects.values()));
