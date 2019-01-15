@@ -82,11 +82,11 @@ public class ImageViewer {
         hbox.getChildren().addAll(stackPane);
         BorderPane border = new BorderPane();
         border.setTop(text);
-        border.setMargin(text, new Insets(20,50,50,380));
+        border.setMargin(text, new Insets(70,50,20,350));
         border.setBottom(hbox);
         border.setStyle(color);
         border.setPrefSize(800,700);
-        border.setMargin(hbox, new Insets(0,50,30,50));
+        border.setMargin(hbox, new Insets(0,50,90,50));
         return new Scene(border, Color.BLACK);
     }
 

@@ -15,7 +15,10 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -133,15 +136,7 @@ public class MenuScene extends Application {
 
     private void setObject(String object)
     {
-        if(object == "Człowiek")
-            this.object = "person";
-        else if(object == "Pies")
-            this.object = "dog";
-        else if(object == "Kot")
-            this.object = "cat";
-        else
-            this.object = "car";
-
+        this.object = object;
     }
     String getObject()
     {
@@ -154,7 +149,19 @@ public class MenuScene extends Application {
 
     /*create ArrayList from enum Objects*/
     private ArrayList listOfObjects(){
-        ArrayList<Objects> arrayList = new ArrayList<>(Arrays.asList(Objects.values()));
+        File file = new File("/home/katarzyna/zespolowe/coco.names");
+        BufferedReader br = null;
+        ArrayList<String> arrayList = new ArrayList<>();
+       // ArrayList<Objects> arrayList = new ArrayList<>(Arrays.asList(Objects.values()));
+        try {
+            br = new BufferedReader(new FileReader(file));
+            String st;
+            while ((st = br.readLine()) != null)
+               arrayList.add(st);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return arrayList;
     }
 
